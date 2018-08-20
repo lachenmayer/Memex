@@ -1,6 +1,4 @@
 import memdown from 'memdown'
-import indexedDB from 'fake-indexeddb'
-import IDBKeyRange from 'fake-indexeddb/lib/FDBKeyRange'
 import { handleAttachment as addPouchPageAttachment } from '../../page-storage/store-page'
 import index from '../'
 import * as oldIndex from '../search-index-old'
@@ -11,6 +9,9 @@ import { searchOld } from '../search-index-old/api'
 import * as data from './import-export.test.data'
 import { MigrationManager } from './migration-manager'
 import { ExportedPage } from './types'
+
+const indexedDB = require('fake-indexeddb')
+const iDBKeyRange = require('fake-indexeddb/lib/FDBKeyRange')
 
 jest.mock('../search-index-new/models/abstract-model')
 
@@ -47,7 +48,7 @@ async function resetDataSources(dbName = 'test') {
     //   => update pointer to memdown and manually delete fake-indexeddb's DB
     indexedDB.deleteDatabase(dbName)
     oldIndex.init({ levelDown: memdown() })
-    newIndex.init({ indexedDB, IDBKeyRange, dbName })
+    newIndex.init({ indexedDB, IDBKeyRange: iDBKeyRange, dbName })
 }
 
 describe('Old=>New index migration', () => {

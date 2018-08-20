@@ -1,5 +1,3 @@
-import indexedDB from 'fake-indexeddb'
-import IDBKeyRange from 'fake-indexeddb/lib/FDBKeyRange'
 import normalize from '../../util/encode-url-for-id'
 
 import Storage from '../../search/search-index-new/storage'
@@ -8,6 +6,9 @@ import { StorageManager } from '../../search/search-index-new/storage/manager'
 import AnnotationBackground from './'
 
 import * as DATA from './storage.test.data'
+
+const indexedDB = require('fake-indexeddb')
+const iDBKeyRange = require('fake-indexeddb/lib/FDBKeyRange')
 
 const runSuite = () => {
     const storageManager = new StorageManager()
@@ -32,7 +33,7 @@ const runSuite = () => {
         storageManager._finishInitialization(
             new Storage({
                 indexedDB,
-                IDBKeyRange,
+                IDBKeyRange: iDBKeyRange,
                 dbName,
                 storageManager,
             }),

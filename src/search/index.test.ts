@@ -1,12 +1,12 @@
 import memdown from 'memdown'
-import indexedDB from 'fake-indexeddb'
-import IDBKeyRange from 'fake-indexeddb/lib/FDBKeyRange'
 
 import { SearchIndex } from './'
 import * as oldIndex from './search-index-old'
 import * as newIndex from './search-index-new'
 import * as DATA from './index.test.data'
-import { intersection, flatten, difference } from 'lodash'
+
+const indexedDB = require('fake-indexeddb')
+const iDBKeyRange = require('fake-indexeddb/lib/FDBKeyRange')
 
 jest.mock('./search-index-new/models/abstract-model')
 jest.mock('lodash/fp/intersection')
@@ -38,7 +38,7 @@ const runSuite = useOld => () => {
         //   => update pointer to memdown and manually delete fake-indexeddb's DB
         indexedDB.deleteDatabase(dbName)
         oldIndex.init({ levelDown: memdown() })
-        newIndex.init({ indexedDB, IDBKeyRange, dbName })
+        newIndex.init({ indexedDB, IDBKeyRange: iDBKeyRange, dbName })
 
         await insertTestData()
     }
